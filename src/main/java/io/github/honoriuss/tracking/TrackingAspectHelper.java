@@ -29,6 +29,14 @@ class TrackingAspectHelper {
         return writeValueAsJsonString(resultMap);
     }
 
+    public String createMessageString(Object result) {
+        try {
+            return mapper.writeValueAsString(result);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private List<String> getNormaliseParameterNames(int argSize, String[] parameterNames) {
         var resList = new ArrayList<>(Arrays.stream(parameterNames).toList());
         if (resList.size() < argSize) {

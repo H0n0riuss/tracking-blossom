@@ -7,6 +7,10 @@ public class TrackingAspectHelperTest {
     private final String standardColName = "colName";
     private final TrackingAspectHelper trackingAspectHelper = new TrackingAspectHelper(standardColName);
 
+    private class TestClass {
+        public String test;
+    }
+
     @Test
     public void createMessageStringTest(){
         var expected = "{\"test\":\"test\"}";
@@ -41,5 +45,15 @@ public class TrackingAspectHelperTest {
         Assertions.assertNotNull(res);
         Assertions.assertEquals(expected.length(), res.length());
         Assertions.assertEquals(expected, res);
+    }
+
+    @Test
+    public void createMessageStringTest4(){
+        var expected = new TestClass();
+        expected.test = "gurr";
+        var res = trackingAspectHelper.createMessageString(expected);
+
+        Assertions.assertNotNull(res);
+        Assertions.assertEquals("{\"test\":\"gurr\"}", res);
     }
 }
