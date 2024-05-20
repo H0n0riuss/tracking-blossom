@@ -12,11 +12,13 @@ import java.util.List;
 
 class TrackingAspectHelper {
     private final Logger logger = LoggerFactory.getLogger(TrackingAspectHelper.class);
-    private final ObjectMapper mapper = new ObjectMapper();
-    private final String standardColName;
 
-    TrackingAspectHelper(String standardColName) {
-        this.standardColName = standardColName;
+    private final ObjectMapper mapper = new ObjectMapper();
+    private final TrackingProperties trackingProperties;
+
+    TrackingAspectHelper(TrackingProperties trackingProperties) {
+        this.trackingProperties = trackingProperties;
+        logger.info("using standard col name: {}", trackingProperties.getColumnName());
     }
 
     public String createMessageString(Object[] args, String[] parameterNames) {
@@ -41,10 +43,10 @@ class TrackingAspectHelper {
         var resList = new ArrayList<>(Arrays.stream(parameterNames).toList());
         if (resList.size() < argSize) {
             logger.info("Found more args: argSize: {}, parameterNames.size(): {}", argSize, parameterNames.length);
-            resList.add(standardColName);
+            resList.add(trackingProperties.getColumnName());
             var diff = resList.size() - argSize;
             for (var i = 0; i < diff; ++i) {
-                resList.add(standardColName + i);
+                resList.add(trackingProperties.getColumnName() + i);
             }
         }
         return resList;

@@ -10,14 +10,14 @@ import org.springframework.stereotype.Component;
 
 @Aspect
 @Component
-class TrackingAspect {
+class TrackingAspect { //TODO null checks
 
     private final ITrackingHandler trackingHandler;
     private final TrackingAspectHelper trackingAspectHelper;
 
-    public TrackingAspect(ITrackingHandler trackingHandler, TrackingAspectHelper trackingAspectHelper) {
+    public TrackingAspect(ITrackingHandler trackingHandler, TrackingProperties trackingProperties) {
         this.trackingHandler = trackingHandler;
-        this.trackingAspectHelper = trackingAspectHelper;
+        this.trackingAspectHelper = new TrackingAspectHelper(trackingProperties);
     }
 
     @Before("@annotation(trackParameters)")

@@ -5,7 +5,12 @@ import org.junit.jupiter.api.Test;
 
 public class TrackingAspectHelperTest {
     private final String standardColName = "colName";
-    private final TrackingAspectHelper trackingAspectHelper = new TrackingAspectHelper(standardColName);
+    private final TrackingProperties trackingProperties = new TrackingProperties();
+    private final TrackingAspectHelper trackingAspectHelper = new TrackingAspectHelper(trackingProperties);
+
+    public TrackingAspectHelperTest() {
+        trackingProperties.setColumnName(standardColName);
+    }
 
     private class TestClass {
         public String test;
