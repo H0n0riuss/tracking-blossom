@@ -5,10 +5,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 @ConfigurationProperties(prefix = "tracking.standard")
-class TrackingProperties {
+class TrackingProperties { //TODO mapping optional --> create generic handler?
     private String columnName;
 
     public String getColumnName() {
+        if (columnName == null) {
+            columnName = "colName";
+        }
         return columnName;
     }
 

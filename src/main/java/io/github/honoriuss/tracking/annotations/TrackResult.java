@@ -7,5 +7,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface TrackResult {
+public @interface TrackResult { //TODO nur beim einfachen Datentypen, ansonsten daraus ein komplettes Object machen
+    String returnColName() default "";
 }

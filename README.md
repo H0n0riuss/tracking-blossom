@@ -23,7 +23,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ComponentScan(basePackages = "io.github.honoriuss")
+@ComponentScan(basePackages = "io.github.honoriuss.tracking")
 public class TrackingConfig {
 }
 ````
