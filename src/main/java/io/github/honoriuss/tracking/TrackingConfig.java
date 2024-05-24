@@ -1,6 +1,7 @@
 package io.github.honoriuss.tracking;
 
 import io.github.honoriuss.tracking.interfaces.ITrackingHandler;
+import io.github.honoriuss.tracking.interfaces.ITrackingObjectMapper;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +13,13 @@ class TrackingConfig {
 
     @Bean
     @ConditionalOnMissingBean(ITrackingHandler.class)
-    public ITrackingHandler getHandler() {
+    public ITrackingHandler<String> getHandler() {
         return TrackingFactory.getDefaultTracking();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(ITrackingObjectMapper.class)
+    public ITrackingObjectMapper<String> getObjectMapper(TrackingProperties trackingProperties) {
+        return TrackingFactory.getDefaultObjectMapper(trackingProperties);
     }
 }

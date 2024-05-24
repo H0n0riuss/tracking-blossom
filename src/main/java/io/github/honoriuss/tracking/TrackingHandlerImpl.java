@@ -4,11 +4,11 @@ import io.github.honoriuss.tracking.interfaces.ITrackingHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-class TrackingHandlerImpl implements ITrackingHandler {
+class TrackingHandlerImpl<T> implements ITrackingHandler<T> {
     private final Logger logger = LoggerFactory.getLogger(TrackingHandlerImpl.class);
 
     @Override
-    public void handleTracking(String message) {
+    public void handleTracking(T message) {
         logger.info("Handling tracking event: {}", message);
     }
 }

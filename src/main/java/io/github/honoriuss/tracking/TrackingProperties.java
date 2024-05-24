@@ -4,13 +4,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConfigurationProperties(prefix = "tracking.standard")
-class TrackingProperties { //TODO mapping optional --> create generic handler?
+@ConfigurationProperties(prefix = "tracking.default")
+class TrackingProperties {
     private String columnName;
 
     public String getColumnName() {
         if (columnName == null) {
-            columnName = "colName";
+            return "defaultColumnName";
         }
         return columnName;
     }

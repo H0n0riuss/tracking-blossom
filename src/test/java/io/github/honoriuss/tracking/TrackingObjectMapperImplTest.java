@@ -1,18 +1,26 @@
 package io.github.honoriuss.tracking;
 
+import io.github.honoriuss.tracking.interfaces.ITrackingObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
-public class TrackingAspectHelperTest {
-    private final String standardColName = "colName";
-    private final TrackingProperties trackingProperties = new TrackingProperties();
-    private final TrackingAspectHelper trackingAspectHelper = new TrackingAspectHelper(trackingProperties);
+@SpringBootTest(classes = {TrackingProperties.class, TrackingObjectMapperImpl.class})
+class TrackingObjectMapperImplTest {
+    private final String defaultColName = "colName";
+    @Autowired
+    private TrackingProperties trackingProperties;
+    @Autowired
+    private ITrackingObjectMapper<String> trackingObjectMapperImpl;
 
-    public TrackingAspectHelperTest() {
-        trackingProperties.setColumnName(standardColName);
+    @BeforeEach
+    public void initTest(){
+        trackingProperties.setColumnName(defaultColName);
     }
 
-    private class TestClass {
+    private static class TestClass {
         public String test;
     }
 
@@ -21,7 +29,7 @@ public class TrackingAspectHelperTest {
         var expected = "{\"test\":\"test\"}";
         var args = new Object[]{"test"};
         var parameterNames = new String[]{"test"};
-        var res = trackingAspectHelper.createMessageString(args, parameterNames);
+        var res = trackingObjectMapperImpl.mapParameters(args, parameterNames);
 
         Assertions.assertNotNull(res);
         Assertions.assertEquals(expected.length(), res.length());
@@ -32,8 +40,8 @@ public class TrackingAspectHelperTest {
     public void createMessageStringTest2(){
         var expected = "{\"colName\":\"test2\",\"test\":\"test\"}";
         var args = new Object[]{"test", "test2"};
-        var parameterNames = new String[]{"test", standardColName};
-        var res = trackingAspectHelper.createMessageString(args, parameterNames);
+        var parameterNames = new String[]{"test", defaultColName};
+        var res = trackingObjectMapperImpl.mapParameters(args, parameterNames);
 
         Assertions.assertNotNull(res);
         Assertions.assertEquals(expected.length(), res.length());
@@ -44,8 +52,8 @@ public class TrackingAspectHelperTest {
     public void createMessageStringTest3(){
         var expected = "{\"colName\":\"test2\",\"test\":\"test\",\"colName0\":\"test0\"}";
         var args = new Object[]{"test", "test2", "test0"};
-        var parameterNames = new String[]{"test", standardColName, standardColName + 0};
-        var res = trackingAspectHelper.createMessageString(args, parameterNames);
+        var parameterNames = new String[]{"test", defaultColName, defaultColName + 0};
+        var res = trackingObjectMapperImpl.mapParameters(args, parameterNames);
 
         Assertions.assertNotNull(res);
         Assertions.assertEquals(expected.length(), res.length());
@@ -56,7 +64,7 @@ public class TrackingAspectHelperTest {
     public void createMessageStringTest4(){
         var expected = new TestClass();
         expected.test = "gurr";
-        var res = trackingAspectHelper.createMessageString(expected);
+        var res = trackingObjectMapperImpl.mapResult(expected);
 
         Assertions.assertNotNull(res);
         Assertions.assertEquals("{\"test\":\"gurr\"}", res);

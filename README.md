@@ -4,7 +4,7 @@
 ````xml
  <properties>
     ...
-    <tracking-spring.version>0.0.1</tracking-spring.version>
+    <tracking-spring.version>0.0.2</tracking-spring.version>
 </properties>
     
 <dependencies>
@@ -39,20 +39,42 @@ public String login(@RequestBody UserSignUpDto user) {
 
 ## Notes
 - if no ITrackingHandler bean/component/service is implemented, all parameters are written on console.
-- if no "parameterNames" are written, "colName" + 0,1,... is used
+- if no ITrackingObjectMapper bean/component/service is implemented, all parameters are mapped as JsonString.
+- if no "parameterNames" are written, "defaultColumnName" + 0,1,... is used
 
-## Optional:
-1. Implement own ITrackingHandler (example):
+## Optional (for customization):
+1. Implement own ITrackingHandler<T> (example):
 ````java
 import io.github.honoriuss.tracking.interfaces.ITrackingHandler;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OwnTracking implements ITrackingHandler {
+public class OwnTracking implements ITrackingHandler<String> {
 
     @Override
     public void handleTracking(String message) {
         System.out.println(message);
+    }
+}
+````
+
+2. Implement own ITrackingObjectMapper<T> (example):  
+Should match own ITrackingHandler<T>
+````java
+import io.github.honoriuss.tracking.interfaces.ITrackingObjectMapper;
+import org.springframework.stereotype.Service;
+
+@Service
+public class OwnTracking implements ITrackingObjectMapper<String> {
+
+    @Override
+    public String mapParameters(Object[] args, String[] parameterNames) {
+        //implement own parameter mapping
+    }
+
+    @Override
+    public String mapResult(Object obj) {
+        
     }
 }
 ````

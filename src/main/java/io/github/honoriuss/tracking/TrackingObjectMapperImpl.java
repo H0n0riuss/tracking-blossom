@@ -2,6 +2,7 @@ package io.github.honoriuss.tracking;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.honoriuss.tracking.interfaces.ITrackingObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,18 +11,19 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-class TrackingAspectHelper {
-    private final Logger logger = LoggerFactory.getLogger(TrackingAspectHelper.class);
+class TrackingObjectMapperImpl implements ITrackingObjectMapper<String> {
+    private final Logger logger = LoggerFactory.getLogger(TrackingObjectMapperImpl.class);
 
     private final ObjectMapper mapper = new ObjectMapper();
     private final TrackingProperties trackingProperties;
 
-    TrackingAspectHelper(TrackingProperties trackingProperties) {
+    TrackingObjectMapperImpl(TrackingProperties trackingProperties) {
         this.trackingProperties = trackingProperties;
-        logger.info("using standard col name: {}", trackingProperties.getColumnName());
+        logger.info("using default col name: {}", trackingProperties.getColumnName());
     }
 
-    public String createMessageString(Object[] args, String[] parameterNames) {
+    @Override
+    public String mapParameters(Object[] args, String[] parameterNames) {
         var resultMap = new HashMap<String, Object>();
         var normalisedParameterNames = getNormaliseParameterNames(args.length, parameterNames);
 
@@ -31,7 +33,8 @@ class TrackingAspectHelper {
         return writeValueAsJsonString(resultMap);
     }
 
-    public String createMessageString(Object result) {
+    @Override
+    public String mapResult(Object result) {
         try {
             return mapper.writeValueAsString(result);
         } catch (JsonProcessingException e) {
