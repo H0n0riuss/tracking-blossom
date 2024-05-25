@@ -49,7 +49,7 @@ import io.github.honoriuss.tracking.interfaces.ITrackingHandler;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OwnTracking implements ITrackingHandler<String> {
+public class OwnTrackingHandler implements ITrackingHandler<String> {
 
     @Override
     public void handleTracking(String message) {
@@ -65,7 +65,7 @@ import io.github.honoriuss.tracking.interfaces.ITrackingObjectMapper;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OwnTracking implements ITrackingObjectMapper<String> {
+public class OwnTrackingMapper implements ITrackingObjectMapper<String> {
 
     @Override
     public String mapParameters(Object[] args, String[] parameterNames) {
