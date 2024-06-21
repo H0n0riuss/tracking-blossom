@@ -8,7 +8,7 @@ abstract class TrackingFactory {
         return new TrackingHandlerImpl<>();
     }
 
-    public static ITrackingObjectMapper<String> getDefaultObjectMapper(TrackingProperties trackingProperties) {
-        return new TrackingObjectMapperImpl(trackingProperties);
+    public static ITrackingObjectMapper<String> getDefaultObjectMapper() {
+        return new TrackingObjectMapperImpl();
     }
 }

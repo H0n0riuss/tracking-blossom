@@ -1,24 +1,16 @@
 package io.github.honoriuss.blossom;
 
 import io.github.honoriuss.blossom.interfaces.ITrackingObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest(classes = {TrackingProperties.class, TrackingObjectMapperImpl.class})
+@SpringBootTest(classes = {TrackingObjectMapperImpl.class})
 class TrackingObjectMapperImplTest {
     private final String defaultColName = "colName";
     @Autowired
-    private TrackingProperties trackingProperties;
-    @Autowired
     private ITrackingObjectMapper<String> trackingObjectMapperImpl;
-
-    @BeforeEach
-    public void initTest(){
-        trackingProperties.setColumnName(defaultColName);
-    }
 
     private static class TestClass {
         public String test;
