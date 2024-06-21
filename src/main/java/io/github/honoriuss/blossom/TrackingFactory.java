@@ -1,7 +1,7 @@
-package io.github.honoriuss.tracking;
+package io.github.honoriuss.blossom;
 
-import io.github.honoriuss.tracking.interfaces.ITrackingHandler;
-import io.github.honoriuss.tracking.interfaces.ITrackingObjectMapper;
+import io.github.honoriuss.blossom.interfaces.ITrackingHandler;
+import io.github.honoriuss.blossom.interfaces.ITrackingObjectMapper;
 
 abstract class TrackingFactory {
     public static ITrackingHandler<String> getDefaultTracking() {

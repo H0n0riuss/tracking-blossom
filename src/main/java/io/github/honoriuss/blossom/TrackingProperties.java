@@ -1,4 +1,4 @@
-package io.github.honoriuss.tracking;
+package io.github.honoriuss.blossom;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

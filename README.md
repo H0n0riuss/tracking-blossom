@@ -1,29 +1,30 @@
 # Tracking Spring
 ## Getting started
-1. Import the newest version of Tracking-Spring in your maven Spring project (pom.xml):
+1. Import the newest version of tracking-blossom in your maven Spring project (pom.xml):
 ````xml
  <properties>
     ...
-    <tracking-spring.version>0.0.2</tracking-spring.version>
+    <tracking-blossom.version>0.0.2</tracking-blossom.version>
 </properties>
     
 <dependencies>
     ...
     <dependency>
         <groupId>io.github.h0n0riuss</groupId>
-        <artifactId>Tracking-Spring</artifactId>
-        <version>${tracking-spring.version}</version>
+        <artifactId>tracking-blossom</artifactId>
+        <version>${tracking-blossom.version}</version>
     </dependency>
 </dependencies>
 ````
 
 2. Create configuration and scan this basePackages to activate aspect (example):
+
 ````java
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ComponentScan(basePackages = "io.github.honoriuss.tracking")
+@ComponentScan(basePackages = "io.github.honoriuss.blossom")
 public class TrackingConfig {
 }
 ````
@@ -44,8 +45,9 @@ public String login(@RequestBody UserSignUpDto user) {
 
 ## Optional (for customization):
 1. Implement own ITrackingHandler<T> (example):
+
 ````java
-import io.github.honoriuss.tracking.interfaces.ITrackingHandler;
+import io.github.honoriuss.blossom.interfaces.ITrackingHandler;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -60,8 +62,9 @@ public class OwnTrackingHandler implements ITrackingHandler<String> {
 
 2. Implement own ITrackingObjectMapper<T> (example):  
 Should match own ITrackingHandler<T>
+
 ````java
-import io.github.honoriuss.tracking.interfaces.ITrackingObjectMapper;
+import io.github.honoriuss.blossom.interfaces.ITrackingObjectMapper;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -74,7 +77,7 @@ public class OwnTrackingMapper implements ITrackingObjectMapper<String> {
 
     @Override
     public String mapResult(Object obj) {
-        
+
     }
 }
 ````

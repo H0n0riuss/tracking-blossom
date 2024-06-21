@@ -11,12 +11,12 @@
     </parent>
 
     <groupId>io.github.h0n0riuss</groupId>
-    <artifactId>tracking-spring</artifactId>
-    <version>0.0.2</version>
+    <artifactId>tracking-blossom</artifactId>
+    <version>0.0.3</version>
 
-    <name>Tracking-Spring</name>
-    <description>Tracking-Spring</description>
-    <url>https://github.com/H0n0riuss/Tracking-Spring</url>
+    <name>tracking-blossom</name>
+    <description>Track your app nice and convenient</description>
+    <url>https://github.com/H0n0riuss/tracking-blossom</url>
 
     <properties>
         <java-project.version>17</java-project.version>
@@ -40,11 +40,6 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <licenses>
@@ -59,14 +54,14 @@
             <name>Joscha Reichenberg</name>
             <email>joscha.reichenberg@aboat-entertaining.com</email>
             <organization>Not-jet</organization>
-            <organizationUrl>https://github.com/H0n0riuss/Tracking-Spring</organizationUrl>
+            <organizationUrl>https://github.com/H0n0riuss/tracking-blossom</organizationUrl>
         </developer>
     </developers>
 
     <scm>
-        <connection>scm:git:git://github.com/H0n0riuss/Tracking-Spring.git</connection>
-        <developerConnection>scm:git:ssh://github.com:H0n0riuss/Tracking-Spring.git</developerConnection>
-        <url>http://github.com/H0n0riuss/Tracking-Spring/tree/main</url>
+        <connection>scm:git:git://github.com/H0n0riuss/tracking-blossom.git</connection>
+        <developerConnection>scm:git:ssh://github.com:H0n0riuss/tracking-blossom.git</developerConnection>
+        <url>http://github.com/H0n0riuss/tracking-blossom/tree/main</url>
     </scm>
 
     <distributionManagement>

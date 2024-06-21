@@ -1,6 +1,6 @@
-package io.github.honoriuss.tracking;
+package io.github.honoriuss.blossom;
 
-import io.github.honoriuss.tracking.interfaces.ITrackingHandler;
+import io.github.honoriuss.blossom.interfaces.ITrackingHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

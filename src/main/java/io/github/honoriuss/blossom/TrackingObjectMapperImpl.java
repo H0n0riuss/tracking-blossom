@@ -1,8 +1,8 @@
-package io.github.honoriuss.tracking;
+package io.github.honoriuss.blossom;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.honoriuss.tracking.interfaces.ITrackingObjectMapper;
+import io.github.honoriuss.blossom.interfaces.ITrackingObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

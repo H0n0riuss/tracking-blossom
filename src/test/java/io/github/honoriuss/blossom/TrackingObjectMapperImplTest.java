@@ -1,6 +1,6 @@
-package io.github.honoriuss.tracking;
+package io.github.honoriuss.blossom;
 
-import io.github.honoriuss.tracking.interfaces.ITrackingObjectMapper;
+import io.github.honoriuss.blossom.interfaces.ITrackingObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

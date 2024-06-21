@@ -1,4 +1,4 @@
-package io.github.honoriuss.tracking.interfaces;
+package io.github.honoriuss.blossom.interfaces;
 
 public interface ITrackingObjectMapper<T> {
     T mapParameters(Object[] args, String[] parameterNames);
