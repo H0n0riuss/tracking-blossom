@@ -9,6 +9,6 @@ class TrackingHandlerImpl<T> implements ITrackingHandler<T> {
 
     @Override
     public void handleTracking(T message) {
-        logger.info("Handling tracking event: {}", message);
+        logger.info("Handle tracking event: {}", message);
     }
 }
