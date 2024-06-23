@@ -50,6 +50,8 @@ class TrackingAspect<T> { //TODO null checks
                                       ITrackingObjectMapper<T> trackingObjectMapper) {
         var handlerType = ((ParameterizedType) trackingHandler.getClass().getGenericInterfaces()[0]).getActualTypeArguments()[0];
         var mapperType = ((ParameterizedType) trackingObjectMapper.getClass().getGenericInterfaces()[0]).getActualTypeArguments()[0];
-        logger.info("Generic types from handler ({}) and  mapper({}) are compatible: {}", handlerType, mapperType, handlerType.equals(mapperType));
+        if (!handlerType.equals(mapperType)) {
+            logger.info("Generic types from handler ({}) and mapper({}) are maybe not compatible", handlerType, mapperType);
+        }
     }
 }

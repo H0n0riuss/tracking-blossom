@@ -5,7 +5,7 @@ import io.github.honoriuss.blossom.interfaces.ITrackingObjectMapper;
 
 abstract class TrackingFactory {
     public static ITrackingHandler<String> getDefaultTracking() {
-        return new TrackingHandlerImpl<>();
+        return new TrackingHandlerImpl();
     }
 
     public static ITrackingObjectMapper<String> getDefaultObjectMapper() {
