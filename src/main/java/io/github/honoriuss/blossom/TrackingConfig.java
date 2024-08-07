@@ -15,8 +15,8 @@ class TrackingConfig {
 
     @Bean
     @ConditionalOnMissingBean(ITrackingHandler.class)
-    public ITrackingHandler<String> getHandler() {
-        return TrackingFactory.getDefaultTracking();
+    public ITrackingHandler<String> getHandler(ITrackingWriter<String> trackingWriter) {
+        return TrackingFactory.getDefaultTracking(trackingWriter);
     }
 
     @Bean
@@ -28,8 +28,8 @@ class TrackingConfig {
     @Bean
     @ConditionalOnMissingBean(ITrackingHandler.class)
     @ConditionalOnProperty(name = "blossom.listen", havingValue = "true")
-    public ITrackingHandler<String> getListener() {
-        return TrackingFactory.getDefaultTrackingListener();
+    public ITrackingHandler<String> getListener(ITrackingWriter<String> trackingWriter) {
+        return TrackingFactory.getDefaultTrackingListener(trackingWriter);
     }
 
     @Bean

@@ -13,8 +13,8 @@ abstract class TrackingFactory {
         return new TrackingObjectMapperImpl();
     }
 
-    public static ITrackingHandler<String> getDefaultTrackingListener() {
-        return new TrackingListenerImpl();
+    public static ITrackingHandler<String> getDefaultTrackingListener(ITrackingWriter<String> trackingWriter) {
+        return new TrackingListenerImpl(trackingWriter);
     }
 
     public static ITrackingWriter<String> getDefaultWriter() {
