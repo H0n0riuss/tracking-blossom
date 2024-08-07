@@ -1,19 +1,16 @@
 package io.github.honoriuss.blossom;
 
-import io.github.honoriuss.blossom.interfaces.ITrackingHandler;
 import io.github.honoriuss.blossom.interfaces.ITrackingWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
 
-class TrackingListenerImpl implements ITrackingHandler<String> {
-    private final ITrackingWriter<String> trackingWriter;
-
-    TrackingListenerImpl(ITrackingWriter<String> trackingWriter) {
-        this.trackingWriter = trackingWriter;
-    }
+class TrackingListenerImpl implements ITrackingWriter<String> {
+    private final Logger logger = LoggerFactory.getLogger(TrackingListenerImpl.class);
 
     @Override
     @EventListener
-    public void handleTracking(String message) {
-        trackingWriter.write(message);
+    public void write(String message) {
+        logger.info("Write event: {}", message);
     }
 }

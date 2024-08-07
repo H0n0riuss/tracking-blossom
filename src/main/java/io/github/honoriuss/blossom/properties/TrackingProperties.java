@@ -6,13 +6,13 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "blossom")
 public class TrackingProperties {
-    private boolean listen;
+    private boolean event;
 
-    public boolean isListen() {
-        return listen;
+    public boolean isEvent() {
+        return event;
     }
 
-    public void setListen(boolean listen) {
-        this.listen = listen;
+    public void setEvent(boolean event) {
+        this.event = event;
     }
 }
