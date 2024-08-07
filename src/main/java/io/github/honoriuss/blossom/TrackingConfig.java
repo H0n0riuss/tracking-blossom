@@ -16,14 +16,14 @@ class TrackingConfig {
 
     @Bean
     @ConditionalOnMissingBean(ITrackingHandler.class)
-    @ConditionalOnProperty(name = "blossom.event", havingValue = "false")
+    @ConditionalOnProperty(name = "blossom.event", havingValue = "false", matchIfMissing = true)
     public ITrackingHandler<String> getHandler(ITrackingWriter<String> trackingWriter) {
         return TrackingFactory.getDefaultTracking(trackingWriter);
     }
 
     @Bean
     @ConditionalOnMissingBean(ITrackingWriter.class)
-    @ConditionalOnProperty(name = "blossom.event", havingValue = "false")
+    @ConditionalOnProperty(name = "blossom.event", havingValue = "false", matchIfMissing = true)
     public ITrackingWriter<String> getWriter() {
         return TrackingFactory.getDefaultWriter();
     }
@@ -37,7 +37,7 @@ class TrackingConfig {
     @Bean
     @ConditionalOnMissingBean(ITrackingHandler.class)
     @ConditionalOnProperty(name = "blossom.event", havingValue = "true")
-    public ITrackingHandler<String> getListener(ApplicationEventPublisher applicationEventPublisher) {
+    public ITrackingHandler<String> getPublisher(ApplicationEventPublisher applicationEventPublisher) {
         return TrackingFactory.getDefaultTrackingPublisher(applicationEventPublisher);
     }
 
