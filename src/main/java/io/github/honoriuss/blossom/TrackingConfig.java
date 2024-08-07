@@ -14,15 +14,10 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 class TrackingConfig {
 
     @Bean
+    @ConditionalOnProperty(name = "blossom.listen", havingValue = "false")
     @ConditionalOnMissingBean(ITrackingHandler.class)
     public ITrackingHandler<String> getHandler(ITrackingWriter<String> trackingWriter) {
         return TrackingFactory.getDefaultTracking(trackingWriter);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(ITrackingObjectMapper.class)
-    public ITrackingObjectMapper<String> getObjectMapper() {
-        return TrackingFactory.getDefaultObjectMapper();
     }
 
     @Bean
@@ -33,9 +28,14 @@ class TrackingConfig {
     }
 
     @Bean
+    @ConditionalOnMissingBean(ITrackingObjectMapper.class)
+    public ITrackingObjectMapper<String> getObjectMapper() {
+        return TrackingFactory.getDefaultObjectMapper();
+    }
+
+    @Bean
     @ConditionalOnMissingBean(ITrackingWriter.class)
     public ITrackingWriter<String> getWriter() {
         return TrackingFactory.getDefaultWriter();
     }
-
 }
