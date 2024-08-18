@@ -2,6 +2,7 @@ package io.github.honoriuss.blossom;
 
 import io.github.honoriuss.blossom.interfaces.ITrackingHandler;
 import io.github.honoriuss.blossom.interfaces.ITrackingObjectMapper;
+import io.github.honoriuss.blossom.interfaces.ITrackingParameterRegistry;
 import io.github.honoriuss.blossom.interfaces.ITrackingWriter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -26,7 +27,13 @@ class TrackingConfig {
 
     @Bean
     @ConditionalOnMissingBean(ITrackingObjectMapper.class)
-    public ITrackingObjectMapper<String> getObjectMapper() {
-        return TrackingFactory.getDefaultObjectMapper();
+    public ITrackingObjectMapper<String> getObjectMapper(ITrackingParameterRegistry parameterRegistry) {
+        return TrackingFactory.getDefaultObjectMapper(parameterRegistry);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(ITrackingParameterRegistry.class)
+    public ITrackingParameterRegistry getDefaultParameterRegistry() {
+        return TrackingFactory.getDefaultParameterRegistry();
     }
 }
