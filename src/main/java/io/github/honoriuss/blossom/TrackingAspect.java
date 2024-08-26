@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 @Aspect
 @Component
@@ -31,18 +33,21 @@ class TrackingAspect<T> { //TODO null checks
 
     @Before("@annotation(trackParameters)")
     void track(JoinPoint joinPoint, TrackParameters trackParameters) {
-        var trackingObject = createTrackingObject(joinPoint, trackParameters.parameterNames());
-        trackingHandler.handleTracking(trackingObject);
+        trackingHandler.handleTracking(createTrackingObject(joinPoint, trackParameters));
     }
 
     @AfterReturning(value = "@annotation(io.github.honoriuss.blossom.annotations.TrackResult)", returning = "result")
     void track(Object result) {
-        var resultJson = trackingObjectMapper.mapResult(result);
-        trackingHandler.handleTracking(resultJson);
+        trackingHandler.handleTracking(trackingObjectMapper.mapResult(result));
     }
 
-    private T createTrackingObject(JoinPoint joinPoint, String[] parameterNames) {
-        var args = joinPoint.getArgs();
+    private T createTrackingObject(JoinPoint joinPoint, TrackParameters trackParameters) {
+        var args = new ArrayList<>(Arrays.asList(joinPoint.getArgs()));
+        var parameterNames = new ArrayList<>(Arrays.asList(trackParameters.parameterNames()));
+        if (!trackParameters.optKey().isEmpty()) { //TODO let the user decide? example: more parameterNames available than parameters etc...
+            args.add(trackParameters.optArg());
+            parameterNames.add(trackParameters.optKey());
+        }
         return trackingObjectMapper.mapParameters(args, parameterNames);
     }
 

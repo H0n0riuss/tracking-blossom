@@ -9,4 +9,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface TrackParameters {
     String[] parameterNames() default {};
+    String optKey() default "";
+    String optArg() default "";
 }
