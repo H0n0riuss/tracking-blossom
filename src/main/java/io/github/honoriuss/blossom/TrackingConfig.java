@@ -1,13 +1,12 @@
 package io.github.honoriuss.blossom;
 
-import io.github.honoriuss.blossom.interfaces.ITrackingHandler;
-import io.github.honoriuss.blossom.interfaces.ITrackingObjectMapper;
-import io.github.honoriuss.blossom.interfaces.ITrackingParameterRegistry;
-import io.github.honoriuss.blossom.interfaces.ITrackingWriter;
+import io.github.honoriuss.blossom.interfaces.*;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+
+import java.util.List;
 
 @Configuration
 @EnableAspectJAutoProxy
@@ -33,7 +32,7 @@ class TrackingConfig {
 
     @Bean
     @ConditionalOnMissingBean(ITrackingParameterRegistry.class)
-    public ITrackingParameterRegistry getDefaultParameterRegistry() {
-        return TrackingFactory.getDefaultParameterRegistry();
+    public ITrackingParameterRegistry getDefaultParameterRegistry(List<ITrackingParameterProvider> parameterProviderList) {
+        return TrackingFactory.getDefaultParameterRegistry(parameterProviderList);
     }
 }

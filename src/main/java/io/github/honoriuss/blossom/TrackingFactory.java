@@ -1,9 +1,8 @@
 package io.github.honoriuss.blossom;
 
-import io.github.honoriuss.blossom.interfaces.ITrackingHandler;
-import io.github.honoriuss.blossom.interfaces.ITrackingObjectMapper;
-import io.github.honoriuss.blossom.interfaces.ITrackingParameterRegistry;
-import io.github.honoriuss.blossom.interfaces.ITrackingWriter;
+import io.github.honoriuss.blossom.interfaces.*;
+
+import java.util.List;
 
 abstract class TrackingFactory {
     public static ITrackingHandler<String> getDefaultTracking(ITrackingWriter<String> trackingWriter) {
@@ -18,7 +17,7 @@ abstract class TrackingFactory {
         return new TrackingWriterImpl();
     }
 
-    public static ITrackingParameterRegistry getDefaultParameterRegistry() {
-        return new TrackingParameterRegistry();
+    public static ITrackingParameterRegistry getDefaultParameterRegistry(List<ITrackingParameterProvider> parameterProviderList) {
+        return new TrackingParameterRegistryImpl(parameterProviderList);
     }
 }
