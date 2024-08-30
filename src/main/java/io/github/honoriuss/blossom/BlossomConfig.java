@@ -2,6 +2,7 @@ package io.github.honoriuss.blossom;
 
 import io.github.honoriuss.blossom.interfaces.*;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -34,5 +35,11 @@ class BlossomConfig {
     @ConditionalOnMissingBean(ITrackingParameterRegistry.class)
     public ITrackingParameterRegistry getDefaultParameterRegistry(List<ITrackingParameterProvider> parameterProviderList) {
         return BlossomFactory.getDefaultParameterRegistry(parameterProviderList);
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "blossom.config", havingValue = "true")
+    public ITrackingFilter getFilter() {
+        return BlossomFactory.getDefaultFilter();
     }
 }

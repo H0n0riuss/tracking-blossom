@@ -20,4 +20,8 @@ abstract class BlossomFactory {
     public static ITrackingParameterRegistry getDefaultParameterRegistry(List<ITrackingParameterProvider> parameterProviderList) {
         return new BlossomParameterRegistryImpl(parameterProviderList);
     }
+
+    public static ITrackingFilter getDefaultFilter() {
+        return new BlossomFilterImpl();
+    }
 }
