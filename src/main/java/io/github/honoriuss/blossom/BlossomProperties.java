@@ -2,9 +2,9 @@ package io.github.honoriuss.blossom;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
-@Configuration
+@Component
 @EnableConfigurationProperties
 @ConfigurationProperties(prefix = "blossom.config")
 class BlossomProperties {

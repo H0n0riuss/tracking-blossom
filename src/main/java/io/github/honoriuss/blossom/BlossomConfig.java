@@ -38,7 +38,7 @@ class BlossomConfig {
     }
 
     @Bean
-    @ConditionalOnProperty(name = "blossom.config", havingValue = "true")
+    @ConditionalOnProperty(name = "blossom.config.enableSessionTracking", havingValue = "true")
     public ITrackingFilter getFilter() {
         return BlossomFactory.getDefaultFilter();
     }
