@@ -7,11 +7,11 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-class TrackingParameterRegistryImpl implements ITrackingParameterRegistry {
-    private final Logger logger = LoggerFactory.getLogger(TrackingParameterRegistryImpl.class);
+class BlossomParameterRegistryImpl implements ITrackingParameterRegistry {
+    private final Logger logger = LoggerFactory.getLogger(BlossomParameterRegistryImpl.class);
     private final List<ITrackingParameterProvider> parameterProviderList;
 
-    TrackingParameterRegistryImpl(List<ITrackingParameterProvider> parameterProviderList) {
+    BlossomParameterRegistryImpl(List<ITrackingParameterProvider> parameterProviderList) {
         this.parameterProviderList = parameterProviderList;
 
         logger.info("{} parameter provider registered.", parameterProviderList.size());

@@ -17,14 +17,14 @@ import java.util.Arrays;
 
 @Aspect
 @Component
-class TrackingAspect<T> { //TODO null checks
-    private final Logger logger = LoggerFactory.getLogger(TrackingAspect.class);
+class BlossomAspect<T> { //TODO null checks
+    private final Logger logger = LoggerFactory.getLogger(BlossomAspect.class);
 
     private final ITrackingHandler<T> trackingHandler;
     private final ITrackingObjectMapper<T> trackingObjectMapper;
 
-    public TrackingAspect(ITrackingHandler<T> trackingHandler,
-                          ITrackingObjectMapper<T> trackingObjectMapper) {
+    public BlossomAspect(ITrackingHandler<T> trackingHandler,
+                         ITrackingObjectMapper<T> trackingObjectMapper) {
         this.trackingHandler = trackingHandler;
         this.trackingObjectMapper = trackingObjectMapper;
         compareGenericParams(trackingHandler, trackingObjectMapper); //TODO

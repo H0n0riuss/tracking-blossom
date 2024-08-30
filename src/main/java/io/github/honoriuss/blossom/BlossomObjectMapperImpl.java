@@ -10,11 +10,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-class TrackingObjectMapperImpl implements ITrackingObjectMapper<String> {
+class BlossomObjectMapperImpl implements ITrackingObjectMapper<String> {
     private final ObjectMapper mapper = new ObjectMapper();
     private final ITrackingParameterRegistry parameterRegistry;
 
-    TrackingObjectMapperImpl(ITrackingParameterRegistry parameterRegistry) {
+    BlossomObjectMapperImpl(ITrackingParameterRegistry parameterRegistry) {
         this.parameterRegistry = parameterRegistry;
     }
 

@@ -10,29 +10,29 @@ import java.util.List;
 
 @Configuration
 @EnableAspectJAutoProxy
-class TrackingConfig {
+class BlossomConfig {
 
     @Bean
     @ConditionalOnMissingBean(ITrackingHandler.class)
     public ITrackingHandler<String> getHandler(ITrackingWriter<String> trackingWriter) {
-        return TrackingFactory.getDefaultTracking(trackingWriter);
+        return BlossomFactory.getDefaultTracking(trackingWriter);
     }
 
     @Bean
     @ConditionalOnMissingBean(ITrackingWriter.class)
     public ITrackingWriter<String> getWriter() {
-        return TrackingFactory.getDefaultWriter();
+        return BlossomFactory.getDefaultWriter();
     }
 
     @Bean
     @ConditionalOnMissingBean(ITrackingObjectMapper.class)
     public ITrackingObjectMapper<String> getObjectMapper(ITrackingParameterRegistry parameterRegistry) {
-        return TrackingFactory.getDefaultObjectMapper(parameterRegistry);
+        return BlossomFactory.getDefaultObjectMapper(parameterRegistry);
     }
 
     @Bean
     @ConditionalOnMissingBean(ITrackingParameterRegistry.class)
     public ITrackingParameterRegistry getDefaultParameterRegistry(List<ITrackingParameterProvider> parameterProviderList) {
-        return TrackingFactory.getDefaultParameterRegistry(parameterProviderList);
+        return BlossomFactory.getDefaultParameterRegistry(parameterProviderList);
     }
 }

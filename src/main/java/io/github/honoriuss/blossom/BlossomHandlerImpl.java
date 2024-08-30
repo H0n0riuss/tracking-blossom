@@ -3,10 +3,10 @@ package io.github.honoriuss.blossom;
 import io.github.honoriuss.blossom.interfaces.ITrackingHandler;
 import io.github.honoriuss.blossom.interfaces.ITrackingWriter;
 
-class TrackingHandlerImpl implements ITrackingHandler<String> {
+class BlossomHandlerImpl implements ITrackingHandler<String> {
     private final ITrackingWriter<String> trackingWriter;
 
-    TrackingHandlerImpl(ITrackingWriter<String> trackingWriter) {
+    BlossomHandlerImpl(ITrackingWriter<String> trackingWriter) {
         this.trackingWriter = trackingWriter;
     }
 
