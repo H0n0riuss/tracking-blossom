@@ -7,14 +7,14 @@ import org.springframework.stereotype.Component;
 @Component
 @EnableConfigurationProperties
 @ConfigurationProperties(prefix = "blossom.config")
-class BlossomProperties {
-    private boolean enableSessionTracking = true;
+public class BlossomProperties {
+    private boolean enabled = true;
 
-    public boolean isEnableSessionTracking() {
-        return enableSessionTracking;
+    public boolean isEnabled() {
+        return enabled;
     }
 
-    public void setEnableSessionTracking(boolean enableSessionTracking) {
-        this.enableSessionTracking = enableSessionTracking;
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }

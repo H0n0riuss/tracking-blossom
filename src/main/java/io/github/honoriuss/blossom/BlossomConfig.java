@@ -3,6 +3,7 @@ package io.github.honoriuss.blossom;
 import io.github.honoriuss.blossom.interfaces.*;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -38,8 +39,16 @@ class BlossomConfig {
     }
 
     @Bean
-    @ConditionalOnProperty(name = "blossom.config.enableSessionTracking", havingValue = "true")
-    public ITrackingFilter getFilter() {
-        return BlossomFactory.getDefaultFilter();
+    @ConditionalOnProperty(name = "blossom.config.enabled", havingValue = "true")
+    public ITrackingFilter getFilter(FilterRegistrationBean<ITrackingFilter> filterRegistrationBean) {
+        var blossom = BlossomFactory.getDefaultFilter();
+        filterRegistrationBean.setFilter(blossom);
+        return blossom;
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "blossom.config.enabled", havingValue = "true")
+    public FilterRegistrationBean<ITrackingFilter> createFilterRegistrationBean() {
+        return new FilterRegistrationBean<>();
     }
 }

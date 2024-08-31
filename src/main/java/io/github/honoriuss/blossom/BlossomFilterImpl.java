@@ -1,19 +1,33 @@
 package io.github.honoriuss.blossom;
 
 import io.github.honoriuss.blossom.interfaces.ITrackingFilter;
+import io.github.honoriuss.blossom.interfaces.ITrackingParameterProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
-class BlossomFilterImpl implements ITrackingFilter {
+class BlossomFilterImpl implements ITrackingFilter, ITrackingParameterProvider {
     private final String sessionIdHeaderName = "session_id";
+
+    @Override
+    public HashMap<String, Object> getBaseParameters() {
+        var map = new HashMap<String, Object>();
+        var request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
+        var sessionId = getOrCreateSessionId(request);
+        map.put(sessionIdHeaderName, sessionId);
+        return map;
+    }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
