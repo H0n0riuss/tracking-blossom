@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 @EnableConfigurationProperties
 @ConfigurationProperties(prefix = "blossom.config")
-public class BlossomProperties {
+class BlossomProperties {
     private boolean enabled = true;
 
     public boolean isEnabled() {
