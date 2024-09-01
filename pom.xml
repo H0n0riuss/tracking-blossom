@@ -12,7 +12,7 @@
 
     <groupId>io.github.h0n0riuss</groupId>
     <artifactId>tracking-blossom</artifactId>
-    <version>0.2.0</version>
+    <version>0.2.1</version>
 
     <name>tracking-blossom</name>
     <description>Track your app nice and convenient</description>
@@ -154,7 +154,6 @@
                 <configuration>
                     <source>${java-project.version}</source>
                     <target>${java-project.version}</target>
-                    <compilerArgument>-proc:none</compilerArgument>
                 </configuration>
             </plugin>
         </plugins>
