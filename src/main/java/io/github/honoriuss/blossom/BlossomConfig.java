@@ -1,6 +1,7 @@
 package io.github.honoriuss.blossom;
 
 import io.github.honoriuss.blossom.interfaces.*;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -9,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 import java.util.List;
+import java.util.Optional;
 
 @Configuration
 @EnableAspectJAutoProxy
@@ -50,5 +52,13 @@ class BlossomConfig {
     @ConditionalOnProperty(name = "blossom.config.enabled", havingValue = "true")
     public FilterRegistrationBean<ITrackingFilter> createFilterRegistrationBean() {
         return new FilterRegistrationBean<>();
+    }
+
+    @Bean
+    public ITrackingParameterProvider getOptionalHeaderParameterProvider(BlossomOptionalProperties blossomOptionalProperties, HttpServletRequest request) {
+        if (blossomOptionalProperties.isMapNotEmpty()) {
+            return BlossomFactory.getOptionalHeaderParameterProvider(blossomOptionalProperties.getHeaders(), request);
+        }
+        return null;
     }
 }

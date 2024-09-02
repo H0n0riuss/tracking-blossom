@@ -1,8 +1,10 @@
 package io.github.honoriuss.blossom;
 
 import io.github.honoriuss.blossom.interfaces.*;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
+import java.util.Map;
 
 abstract class BlossomFactory {
     public static ITrackingHandler<String> getDefaultTracking(ITrackingWriter<String> trackingWriter) {
@@ -23,5 +25,9 @@ abstract class BlossomFactory {
 
     public static ITrackingFilter getDefaultFilter() {
         return new BlossomFilterImpl();
+    }
+
+    public static ITrackingParameterProvider getOptionalHeaderParameterProvider(Map<String, String> headers, HttpServletRequest request) {
+        return new BlossomOptionalParameterProviderImpl(headers, request);
     }
 }
