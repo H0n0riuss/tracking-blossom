@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 import java.util.List;
-import java.util.Optional;
 
 @Configuration
 @EnableAspectJAutoProxy
@@ -55,9 +54,9 @@ class BlossomConfig {
     }
 
     @Bean
-    public ITrackingParameterProvider getOptionalHeaderParameterProvider(BlossomOptionalProperties blossomOptionalProperties, HttpServletRequest request) {
-        if (blossomOptionalProperties.isMapNotEmpty()) {
-            return BlossomFactory.getOptionalHeaderParameterProvider(blossomOptionalProperties.getHeaders(), request);
+    public ITrackingParameterProvider getOptionalHeaderParameterProvider(BlossomPropertiesOptional blossomPropertiesOptional, HttpServletRequest request) {
+        if (blossomPropertiesOptional.isMapNotEmpty()) {
+            return BlossomFactory.getOptionalHeaderParameterProvider(blossomPropertiesOptional.getHeaders(), request);
         }
         return null;
     }

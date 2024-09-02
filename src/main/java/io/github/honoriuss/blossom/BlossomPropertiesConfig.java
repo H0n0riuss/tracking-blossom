@@ -2,14 +2,14 @@ package io.github.honoriuss.blossom;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.Map;
 
-@Component
+@Configuration
 @EnableConfigurationProperties
 @ConfigurationProperties(prefix = "blossom.config")
-class BlossomConfigProperties {
+class BlossomPropertiesConfig {
     private boolean enabled = true;
 
     public boolean isEnabled() {
@@ -21,9 +21,9 @@ class BlossomConfigProperties {
     }
 }
 
-@Component
+@Configuration
 @ConfigurationProperties(prefix = "blossom.optional")
-class BlossomOptionalProperties {
+class BlossomPropertiesOptional {
     private Map<String, String> headers;
 
     public Map<String, String> getHeaders() {
