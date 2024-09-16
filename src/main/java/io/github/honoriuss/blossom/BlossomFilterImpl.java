@@ -12,13 +12,24 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
 class BlossomFilterImpl implements ITrackingFilter, ITrackingParameterProvider {
-    private final String sessionIdHeaderName = "session_id";
+    private final String sessionIdHeaderName; //TODO add in config
+    private final String timestampName; //TODO add in config
+
+    public BlossomFilterImpl() {
+        this("session_id", "timestamp");
+    }
+
+    public BlossomFilterImpl(String sessionIdHeaderName, String timestampName) {
+        this.sessionIdHeaderName = sessionIdHeaderName;
+        this.timestampName = timestampName;
+    }
 
     @Override
     public HashMap<String, Object> getBaseParameters() {
@@ -26,6 +37,7 @@ class BlossomFilterImpl implements ITrackingFilter, ITrackingParameterProvider {
         var request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
         var sessionId = getOrCreateSessionId(request);
         map.put(sessionIdHeaderName, sessionId);
+        map.put(timestampName, LocalDateTime.now().toString());
         return map;
     }
 
