@@ -19,12 +19,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 class BlossomFilterImpl implements ITrackingFilter, ITrackingParameterProvider {
-    private final String sessionIdHeaderName; //TODO add in config
-    private final String timestampName; //TODO add in config
-
-    public BlossomFilterImpl() {
-        this("session_id", "timestamp");
-    }
+    private final String sessionIdHeaderName;
+    private final String timestampName;
 
     public BlossomFilterImpl(String sessionIdHeaderName, String timestampName) {
         this.sessionIdHeaderName = sessionIdHeaderName;

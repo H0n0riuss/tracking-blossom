@@ -11,6 +11,8 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "blossom.config")
 class BlossomPropertiesConfig {
     private boolean enabled = true;
+    private String sessionIdName = "session_id";
+    private String timestampName = "timestamp";
 
     public boolean isEnabled() {
         return enabled;
@@ -18,6 +20,22 @@ class BlossomPropertiesConfig {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public String getSessionIdName() {
+        return sessionIdName;
+    }
+
+    public void setSessionIdName(String sessionIdName) {
+        this.sessionIdName = sessionIdName;
+    }
+
+    public String getTimestampName() {
+        return timestampName;
+    }
+
+    public void setTimestampName(String timestampName) {
+        this.timestampName = timestampName;
     }
 }
 

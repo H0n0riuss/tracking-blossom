@@ -41,8 +41,8 @@ class BlossomConfig {
 
     @Bean
     @ConditionalOnProperty(name = "blossom.config.enabled", havingValue = "true")
-    public ITrackingFilter getFilter(FilterRegistrationBean<ITrackingFilter> filterRegistrationBean) {
-        var blossom = BlossomFactory.getDefaultFilter();
+    public ITrackingFilter getFilter(FilterRegistrationBean<ITrackingFilter> filterRegistrationBean, BlossomPropertiesConfig blossomPropertiesConfig) {
+        var blossom = BlossomFactory.getDefaultFilter(blossomPropertiesConfig.getSessionIdName(), blossomPropertiesConfig.getTimestampName());
         filterRegistrationBean.setFilter(blossom);
         return blossom;
     }

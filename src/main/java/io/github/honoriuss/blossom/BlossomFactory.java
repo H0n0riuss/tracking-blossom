@@ -23,8 +23,8 @@ abstract class BlossomFactory {
         return new BlossomParameterRegistryImpl(parameterProviderList);
     }
 
-    public static ITrackingFilter getDefaultFilter() {
-        return new BlossomFilterImpl();
+    public static ITrackingFilter getDefaultFilter(String sessionIdHeaderName, String timestampName) {
+        return new BlossomFilterImpl(sessionIdHeaderName, timestampName);
     }
 
     public static ITrackingParameterProvider getOptionalHeaderParameterProvider(Map<String, String> headers, HttpServletRequest request) {
