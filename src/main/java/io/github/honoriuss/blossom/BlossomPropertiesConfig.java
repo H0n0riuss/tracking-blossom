@@ -10,7 +10,7 @@ import java.util.Map;
 @EnableConfigurationProperties
 @ConfigurationProperties(prefix = "blossom.config")
 class BlossomPropertiesConfig {
-    private boolean enabled = true;
+    private boolean enabled;
     private String sessionIdName = "session_id";
     private String timestampName = "timestamp";
 
