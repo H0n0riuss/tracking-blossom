@@ -2,6 +2,7 @@ package io.github.honoriuss.blossom;
 
 import io.github.honoriuss.blossom.annotations.AppContext;
 import io.github.honoriuss.blossom.annotations.TrackParameters;
+import io.github.honoriuss.blossom.interfaces.ITrackingAppContextHandler;
 import io.github.honoriuss.blossom.interfaces.ITrackingHandler;
 import io.github.honoriuss.blossom.interfaces.ITrackingObjectMapper;
 import org.aspectj.lang.JoinPoint;
@@ -48,9 +49,12 @@ class BlossomAspectHelper<T> {
     private final Logger logger = LoggerFactory.getLogger(BlossomAspectHelper.class);
 
     private final ITrackingObjectMapper<T> trackingObjectMapper;
+    private final ITrackingAppContextHandler trackingAppContextHandler;
+
     BlossomAspectHelper(ITrackingHandler<T> trackingHandler,
-                        ITrackingObjectMapper<T> trackingObjectMapper) {
+                        ITrackingObjectMapper<T> trackingObjectMapper, ITrackingAppContextHandler trackingAppContextHandler) {
         this.trackingObjectMapper = trackingObjectMapper;
+        this.trackingAppContextHandler = trackingAppContextHandler;
         compareGenericParams(trackingHandler, trackingObjectMapper); //TODO
         logger.info("using ITrackingHandler: {} and ITrackingObjectMapper: {}", trackingHandler.getClass(), trackingObjectMapper.getClass());
     }
@@ -63,10 +67,7 @@ class BlossomAspectHelper<T> {
     }
 
     protected void addAppContextArgument(ArrayList<Object> args, ArrayList<String> parameterNames, AppContext appContext) {
-        if (appContext != null) {
-            args.add(appContext.app());
-            parameterNames.add(appContext.appKey());
-        }
+        trackingAppContextHandler.addAppContext(args, parameterNames, appContext);
     }
 
     protected void compareGenericParams(ITrackingHandler<T> trackingHandler,

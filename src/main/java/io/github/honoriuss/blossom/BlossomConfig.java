@@ -40,6 +40,12 @@ class BlossomConfig {
     }
 
     @Bean
+    @ConditionalOnMissingBean(ITrackingAppContextHandler.class)
+    public ITrackingAppContextHandler getDefaultParameterRegistry() {
+        return BlossomFactory.getDefaultAppContextHandler();
+    }
+
+    @Bean
     @ConditionalOnProperty(name = "blossom.config.enabled", havingValue = "true")
     public ITrackingFilter getFilter(FilterRegistrationBean<ITrackingFilter> filterRegistrationBean, BlossomPropertiesConfig blossomPropertiesConfig) {
         var blossom = BlossomFactory.getDefaultFilter(blossomPropertiesConfig.getSessionIdName(), blossomPropertiesConfig.getTimestampName());

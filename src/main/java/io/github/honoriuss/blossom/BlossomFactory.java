@@ -30,4 +30,8 @@ abstract class BlossomFactory {
     public static ITrackingParameterProvider getOptionalHeaderParameterProvider(Map<String, String> headers, HttpServletRequest request) {
         return new BlossomOptionalParameterProviderImpl(headers, request);
     }
+
+    public static ITrackingAppContextHandler getDefaultAppContextHandler() {
+        return new BlossomAppContextHandlerImpl();
+    }
 }
