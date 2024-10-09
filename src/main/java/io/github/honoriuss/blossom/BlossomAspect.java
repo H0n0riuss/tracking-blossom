@@ -1,5 +1,6 @@
 package io.github.honoriuss.blossom;
 
+import io.github.honoriuss.blossom.annotations.AdditionalTrackingInfo;
 import io.github.honoriuss.blossom.annotations.AppContext;
 import io.github.honoriuss.blossom.annotations.TrackParameters;
 import io.github.honoriuss.blossom.interfaces.ITrackingAppContextHandler;
@@ -9,6 +10,7 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -35,7 +37,14 @@ class BlossomAspect<T> { //TODO null checks
 
     @Before(value = "@annotation(trackParameters)")
     void track(JoinPoint joinPoint, TrackParameters trackParameters) {
-        trackingHandler.handleTracking(blossomAspectHelper.createTrackingObject(joinPoint, trackParameters));
+        var trackingObj = blossomAspectHelper.createTrackingObject(joinPoint, trackParameters);
+
+        var method = ((MethodSignature) joinPoint.getSignature()).getMethod();
+        if (method.isAnnotationPresent(AdditionalTrackingInfo.class)) {
+            trackingHandler.handleTracking(trackingObj, method.getAnnotation(AdditionalTrackingInfo.class));
+        } else {
+            trackingHandler.handleTracking(trackingObj);
+        }
     }
 
     @AfterReturning(value = "@annotation(io.github.honoriuss.blossom.annotations.TrackResult)", returning = "result")

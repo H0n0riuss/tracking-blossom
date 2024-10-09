@@ -41,7 +41,7 @@ class BlossomConfig {
 
     @Bean
     @ConditionalOnMissingBean(ITrackingAppContextHandler.class)
-    public ITrackingAppContextHandler getDefaultParameterRegistry() {
+    public ITrackingAppContextHandler getDefaultAppContextHandler() {
         return BlossomFactory.getDefaultAppContextHandler();
     }
 
