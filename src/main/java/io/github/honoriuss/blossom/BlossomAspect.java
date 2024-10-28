@@ -61,7 +61,8 @@ class BlossomAspectHelper<T> {
     private final ITrackingAppContextHandler trackingAppContextHandler;
 
     BlossomAspectHelper(ITrackingHandler<T> trackingHandler,
-                        ITrackingObjectMapper<T> trackingObjectMapper, ITrackingAppContextHandler trackingAppContextHandler) {
+                        ITrackingObjectMapper<T> trackingObjectMapper,
+                        ITrackingAppContextHandler trackingAppContextHandler) {
         this.trackingObjectMapper = trackingObjectMapper;
         this.trackingAppContextHandler = trackingAppContextHandler;
         compareGenericParams(trackingHandler, trackingObjectMapper); //TODO
@@ -81,10 +82,14 @@ class BlossomAspectHelper<T> {
 
     protected void compareGenericParams(ITrackingHandler<T> trackingHandler,
                                         ITrackingObjectMapper<T> trackingObjectMapper) {
-        var handlerType = ((ParameterizedType) trackingHandler.getClass().getGenericInterfaces()[0]).getActualTypeArguments()[0];
-        var mapperType = ((ParameterizedType) trackingObjectMapper.getClass().getGenericInterfaces()[0]).getActualTypeArguments()[0];
-        if (!handlerType.equals(mapperType)) {
-            logger.info("Generic types from handler ({}) and mapper({}) are maybe not compatible", handlerType, mapperType);
+        try {
+            var handlerType = ((ParameterizedType) trackingHandler.getClass().getGenericInterfaces()[0]).getActualTypeArguments()[0];
+            var mapperType = ((ParameterizedType) trackingObjectMapper.getClass().getGenericInterfaces()[0]).getActualTypeArguments()[0];
+            if (!handlerType.equals(mapperType)) {
+                logger.info("Generic types from handler ({}) and mapper({}) are maybe not compatible", handlerType, mapperType);
+            }
+        } catch (Exception ex) {
+            logger.warn("Cant compare generic types: ", ex);
         }
     }
 
