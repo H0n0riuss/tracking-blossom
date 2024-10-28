@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -65,7 +66,7 @@ class BlossomAspectHelper<T> {
                         ITrackingAppContextHandler trackingAppContextHandler) {
         this.trackingObjectMapper = trackingObjectMapper;
         this.trackingAppContextHandler = trackingAppContextHandler;
-        compareGenericParams(trackingHandler, trackingObjectMapper); //TODO
+        //compareGenericParams(trackingHandler, trackingObjectMapper); //TODO
         logger.info("using ITrackingHandler: {} and ITrackingObjectMapper: {}", trackingHandler.getClass(), trackingObjectMapper.getClass());
     }
 
@@ -78,19 +79,6 @@ class BlossomAspectHelper<T> {
 
     protected void addAppContextArgument(ArrayList<Object> args, ArrayList<String> parameterNames, AppContext appContext) {
         trackingAppContextHandler.addAppContext(args, parameterNames, appContext);
-    }
-
-    protected void compareGenericParams(ITrackingHandler<T> trackingHandler,
-                                        ITrackingObjectMapper<T> trackingObjectMapper) {
-        try {
-            var handlerType = ((ParameterizedType) trackingHandler.getClass().getGenericInterfaces()[0]).getActualTypeArguments()[0];
-            var mapperType = ((ParameterizedType) trackingObjectMapper.getClass().getGenericInterfaces()[0]).getActualTypeArguments()[0];
-            if (!handlerType.equals(mapperType)) {
-                logger.info("Generic types from handler ({}) and mapper({}) are maybe not compatible", handlerType, mapperType);
-            }
-        } catch (Exception ex) {
-            logger.warn("Cant compare generic types: ", ex);
-        }
     }
 
     protected AppContext getOptionalAppContext(JoinPoint joinPoint) {
@@ -120,5 +108,40 @@ class BlossomAspectHelper<T> {
         addAppContextArgument(args, parameterNames, getOptionalAppContext(joinPoint));
 
         return trackingObjectMapper.mapParameters(args, parameterNames);
+    }
+
+    protected void compareGenericParams(ITrackingHandler<T> trackingHandler,
+                                        ITrackingObjectMapper<T> trackingObjectMapper) {
+        try {
+            var genericHandlerInterface = getGenericType(trackingHandler, ITrackingHandler.class);
+            var genericMapperInterface = getGenericType(trackingObjectMapper, ITrackingObjectMapper.class);
+
+            if (genericHandlerInterface instanceof ParameterizedType &&
+                    genericMapperInterface instanceof ParameterizedType) {
+                var handlerType = ((ParameterizedType) genericHandlerInterface).getActualTypeArguments()[0];
+                var mapperType = ((ParameterizedType) genericMapperInterface).getActualTypeArguments()[0];
+                if (!handlerType.equals(mapperType)) {
+                    logger.info("Generic types from handler ({}) and mapper({}) are maybe not compatible", handlerType, mapperType);
+                }
+            } else {
+                logger.info("Generic types from handler ({}) and mapper({}) are maybe not compatible", genericHandlerInterface, genericMapperInterface);
+            }
+        } catch (Exception ex) {
+            logger.warn("Cant compare generic types: ", ex);
+        }
+    }
+
+    private Type getGenericType(Object instance, Class<?> interfaceClass) {
+        var genericInterfaces = instance.getClass().getGenericInterfaces();
+
+        for (var genericInterface : genericInterfaces) {
+            if (genericInterface instanceof ParameterizedType parameterizedType) {
+                if (parameterizedType.getRawType().equals(interfaceClass)) {
+                    return parameterizedType.getActualTypeArguments()[0];
+                }
+            }
+        }
+
+        return null;
     }
 }
