@@ -13,17 +13,17 @@ import java.util.List;
 
 @Configuration
 @EnableAspectJAutoProxy
-class BlossomConfig {
+class BlossomConfig<T> {
 
     @Bean
     @ConditionalOnMissingBean(ITrackingHandler.class)
-    public ITrackingHandler<String> getHandler(ITrackingWriter<String> trackingWriter) {
+    public ITrackingHandler<T> getHandler(ITrackingWriter<T> trackingWriter) {
         return BlossomFactory.getDefaultTracking(trackingWriter);
     }
 
     @Bean
     @ConditionalOnMissingBean(ITrackingWriter.class)
-    public ITrackingWriter<String> getWriter() {
+    public ITrackingWriter<T> getWriter() {
         return BlossomFactory.getDefaultWriter();
     }
 

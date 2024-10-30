@@ -7,16 +7,16 @@ import java.util.List;
 import java.util.Map;
 
 abstract class BlossomFactory {
-    public static ITrackingHandler<String> getDefaultTracking(ITrackingWriter<String> trackingWriter) {
-        return new BlossomHandlerImpl(trackingWriter);
+    public static <T> ITrackingHandler<T> getDefaultTracking(ITrackingWriter<T> trackingWriter) {
+        return new BlossomHandlerImpl<>(trackingWriter);
     }
 
     public static ITrackingObjectMapper<String> getDefaultObjectMapper(ITrackingParameterRegistry parameterRegistry) {
         return new BlossomObjectMapperImpl(parameterRegistry);
     }
 
-    public static ITrackingWriter<String> getDefaultWriter() {
-        return new BlossomWriterImpl();
+    public static <T> ITrackingWriter<T> getDefaultWriter() {
+        return new BlossomWriterImpl<>();
     }
 
     public static ITrackingParameterRegistry getDefaultParameterRegistry(List<ITrackingParameterProvider> parameterProviderList) {

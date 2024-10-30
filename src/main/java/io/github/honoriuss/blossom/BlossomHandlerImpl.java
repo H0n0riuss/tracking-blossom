@@ -3,15 +3,15 @@ package io.github.honoriuss.blossom;
 import io.github.honoriuss.blossom.interfaces.ITrackingHandler;
 import io.github.honoriuss.blossom.interfaces.ITrackingWriter;
 
-class BlossomHandlerImpl implements ITrackingHandler<String> {
-    private final ITrackingWriter<String> trackingWriter;
+class BlossomHandlerImpl<T> implements ITrackingHandler<T> {
+    private final ITrackingWriter<T> trackingWriter;
 
-    BlossomHandlerImpl(ITrackingWriter<String> trackingWriter) {
+    BlossomHandlerImpl(ITrackingWriter<T> trackingWriter) {
         this.trackingWriter = trackingWriter;
     }
 
     @Override
-    public void handleTracking(String message) {
+    public void handleTracking(T message) {
         trackingWriter.write(message);
     }
 }
