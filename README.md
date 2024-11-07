@@ -42,6 +42,14 @@ public String login(@RequestBody UserSignUpDto user) {
 - if no ITrackingHandler bean/component/service is implemented, all parameters are written on console.
 - if no ITrackingObjectMapper bean/component/service is implemented, all parameters are mapped as JsonString.
 - if no "parameterNames" are written, "defaultColumnName" + 0,1,... is used
+- if you don't want to track some parameters, simply use `""` to ignore them (from left to right) Example:
+````java
+@PostMapping("login")
+@TrackParameters(parameterNames = {"", "user"})
+public String login(@RequestParam String ignoreMe, @RequestBody UserSignUpDto user, @RequestParam String ignoreMeToo) {
+    return homeService.login(user.username(), user.password());
+}
+````
 
 ## Optional (for customization):
 1. Implement own ITrackingHandler<T> (example):
@@ -109,4 +117,29 @@ public class OwnTrackingFilter implements ITrackingFilter {
         filterChain.doFilter(servletRequest, servletResponse);
     }
 }
+````
+
+## Other Features
+### Add automatic timestamp and sessionId (you can change the names)
+So in every tracking data you get two additional fields (random UUID and timestamp)
+In your response, there will appear a SessionId with the name "sessionId" or your custom name
+
+`application.yml:`
+````yml
+blossom:
+  config:
+    enabled: true
+    session-id-name: customSessionName
+    timestamp-name: customTimestampName
+````
+
+### Add header info (read)
+After `headers` you specify your header name to read, and you can change the trackingName in your Object. It is possible to name it as the header name
+
+`application.yml:`
+````yml
+blossom:
+  optional:
+    headers:
+      headerNameToRead: trackingName
 ````
