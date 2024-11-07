@@ -4,7 +4,7 @@
 ````xml
  <properties>
     ...
-    <tracking-blossom.version>0.0.2</tracking-blossom.version>
+    <tracking-blossom.version>0.2.7</tracking-blossom.version>
 </properties>
     
 <dependencies>
@@ -77,7 +77,36 @@ public class OwnTrackingMapper implements ITrackingObjectMapper<String> {
 
     @Override
     public String mapResult(Object obj) {
+        //own mapping
+    }
+}
+````
 
+````java
+import io.github.honoriuss.blossom.interfaces.ITrackingParameterProvider;
+import org.springframework.stereotype.Service;
+
+@Service
+public class OwnTrackingProvider implements ITrackingParameterProvider {
+
+    @Override
+    public void addBaseParameters(HashMap<String, Object> parameterHashMap) {
+        //parameterHashMap.put("key", "value");
+    }
+}
+````
+
+````java
+import io.github.honoriuss.blossom.interfaces.ITrackingFilter;
+import org.springframework.stereotype.Service;
+
+@Service
+public class OwnTrackingFilter implements ITrackingFilter {
+
+    @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        //add your filter logic here --> its Spring context
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 }
 ````

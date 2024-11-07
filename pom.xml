@@ -12,7 +12,7 @@
 
     <groupId>io.github.h0n0riuss</groupId>
     <artifactId>tracking-blossom</artifactId>
-    <version>0.2.6</version>
+    <version>0.2.7</version>
 
     <name>tracking-blossom</name>
     <description>Track your app nice and convenient</description>
@@ -98,6 +98,13 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>

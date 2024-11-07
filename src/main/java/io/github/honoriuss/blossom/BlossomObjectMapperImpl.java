@@ -51,6 +51,8 @@ class BlossomObjectMapperImpl implements ITrackingObjectMapper<String> {
 
     private void addRegistryEntries(HashMap<String, Object> resultMap) {
         for (var provider : parameterRegistry.getTrackingParameterProviders()) {
+            provider.addBaseParameters(resultMap);
+            //TODO delete next 5 lines
             var baseParameters = provider.getBaseParameters();
             if (baseParameters == null) {
                 continue;

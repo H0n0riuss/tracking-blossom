@@ -38,6 +38,14 @@ class BlossomFilterImpl implements ITrackingFilter, ITrackingParameterProvider {
     }
 
     @Override
+    public void addBaseParameters(HashMap<String, Object> parameterHashMap) {
+        var request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
+        var sessionId = getOrCreateSessionId(request);
+        parameterHashMap.put(sessionIdHeaderName, sessionId);
+        parameterHashMap.put(timestampName, LocalDateTime.now().toString());
+    }
+
+    @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         if (servletRequest instanceof HttpServletRequest httpServletRequest) {
             var sessionId = getOrCreateSessionId(httpServletRequest);

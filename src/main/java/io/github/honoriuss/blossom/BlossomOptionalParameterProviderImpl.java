@@ -23,4 +23,11 @@ class BlossomOptionalParameterProviderImpl implements ITrackingParameterProvider
         }
         return map;
     }
+
+    @Override
+    public void addBaseParameters(HashMap<String, Object> parameterHashMap) {
+        for (var headerKey : headers.keySet()) {
+            parameterHashMap.put(headers.get(headerKey), request.getHeader(headerKey));
+        }
+    }
 }
