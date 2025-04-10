@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 abstract class BlossomFactory {
-    public static <T> ITrackingHandler<T> getDefaultTracking(ITrackingWriter<T> trackingWriter) {
+    public static <T> ITrackingHandler<T> getDefaultTrackingHandler(ITrackingWriter<T> trackingWriter) {
         return new BlossomHandlerImpl<>(trackingWriter);
     }
 

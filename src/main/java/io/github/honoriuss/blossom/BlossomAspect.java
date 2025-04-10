@@ -7,7 +7,9 @@ import io.github.honoriuss.blossom.interfaces.ITrackingAppContextHandler;
 import io.github.honoriuss.blossom.interfaces.ITrackingHandler;
 import io.github.honoriuss.blossom.interfaces.ITrackingObjectMapper;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -20,6 +22,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @Aspect
 @Component
@@ -28,12 +31,15 @@ class BlossomAspect<T> { //TODO null checks
     private final ITrackingObjectMapper<T> trackingObjectMapper;
     private final BlossomAspectHelper<T> blossomAspectHelper;
 
+    private final LoggingContext loggingContext;
+
     public BlossomAspect(ITrackingHandler<T> trackingHandler,
                          ITrackingObjectMapper<T> trackingObjectMapper,
-                         BlossomAspectHelper<T> blossomAspectHelper) {
+                         BlossomAspectHelper<T> blossomAspectHelper, LoggingContext loggingContext) {
         this.trackingHandler = trackingHandler;
         this.trackingObjectMapper = trackingObjectMapper;
         this.blossomAspectHelper = blossomAspectHelper;
+        this.loggingContext = loggingContext;
     }
 
     @Before(value = "@annotation(trackParameters)")
@@ -51,6 +57,22 @@ class BlossomAspect<T> { //TODO null checks
     @AfterReturning(value = "@annotation(io.github.honoriuss.blossom.annotations.TrackResult)", returning = "result")
     void track(Object result) {
         trackingHandler.handleTracking(trackingObjectMapper.mapResult(result));
+    }
+
+    @Around("@annotation(io.github.honoriuss.blossom.annotations.TrackParamsInContext)")
+    Object logMethodParams(ProceedingJoinPoint joinPoint) throws Throwable {
+        var methodSignature = (MethodSignature) joinPoint.getSignature();
+        var methodName = methodSignature.getName();
+        var args = joinPoint.getArgs();
+
+        var params = Arrays.stream(args)
+                .map(arg -> arg != null ? arg.toString() : "null")
+                .collect(Collectors.joining(", "));
+
+        var logEntry = String.format("Method: %s, Params: [%s]", methodName, params);
+        loggingContext.addLogEntry(logEntry);
+
+        return joinPoint.proceed();
     }
 }
 
@@ -145,3 +167,4 @@ class BlossomAspectHelper<T> {
         return null;
     }
 }
+
