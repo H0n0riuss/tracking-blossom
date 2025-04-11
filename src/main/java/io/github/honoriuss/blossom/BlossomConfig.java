@@ -22,42 +22,43 @@ class BlossomConfig<T> {
     @Bean
     @ConditionalOnMissingBean(ITrackingHandler.class)
     public ITrackingHandler<T> getHandler(ITrackingWriter<T> trackingWriter) {
-        logger.info("Using DefaultHandler: " + trackingWriter.getClass().getSimpleName());
+        logger.info("Using DefaultHandler");
+        logger.info("Using Writer: " + trackingWriter.getClass().getSimpleName());
         return BlossomFactory.getDefaultTrackingHandler(trackingWriter);
     }
 
     @Bean
     @ConditionalOnMissingBean(ITrackingWriter.class)
     public ITrackingWriter<T> getWriter() {
-        logger.info("Using DefaultWriter");
+        logger.info("Using DefaultTrackingWriter");
         return BlossomFactory.getDefaultWriter();
     }
 
     @Bean
     @ConditionalOnMissingBean(ITrackingObjectMapper.class)
     public ITrackingObjectMapper<String> getObjectMapper(ITrackingParameterRegistry parameterRegistry) {
-        logger.info("Using DefaultObjectMapper");
+        logger.info("Using DefaultTrackingObjectMapper");
         return BlossomFactory.getDefaultObjectMapper(parameterRegistry);
     }
 
     @Bean
     @ConditionalOnMissingBean(ITrackingParameterRegistry.class)
     public ITrackingParameterRegistry getDefaultParameterRegistry(List<ITrackingParameterProvider> parameterProviderList) {
-        logger.info("Using DefaultParameterRegistry");
+        logger.info("Using DefaultTrackingParameterRegistry");
         return BlossomFactory.getDefaultParameterRegistry(parameterProviderList);
     }
 
     @Bean
     @ConditionalOnMissingBean(ITrackingAppContextHandler.class)
     public ITrackingAppContextHandler getDefaultAppContextHandler() {
-        logger.info("Using DefaultAppContextHandler");
+        logger.info("Using DefaultTrackingAppContextHandler");
         return BlossomFactory.getDefaultAppContextHandler();
     }
 
     @Bean
     @ConditionalOnProperty(name = "blossom.config.enabled", havingValue = "true")
     public ITrackingFilter getFilter(FilterRegistrationBean<ITrackingFilter> filterRegistrationBean, BlossomPropertiesConfig blossomPropertiesConfig) {
-        logger.info("Using DefaultFilter");
+        logger.info("Using TrackingDefaultFilter: FilterRegistrationBean: " + filterRegistrationBean.getClass().getSimpleName());
         var blossom = BlossomFactory.getDefaultFilter(blossomPropertiesConfig.getSessionIdName(), blossomPropertiesConfig.getTimestampName());
         filterRegistrationBean.setFilter(blossom);
         return blossom;
@@ -66,7 +67,7 @@ class BlossomConfig<T> {
     @Bean
     @ConditionalOnProperty(name = "blossom.config.enabled", havingValue = "true")
     public FilterRegistrationBean<ITrackingFilter> createFilterRegistrationBean() {
-        logger.info("Using DefaultRegistrationBean");
+        logger.info("Using DefaultTrackingRegistrationBean");
         return new FilterRegistrationBean<>();
     }
 

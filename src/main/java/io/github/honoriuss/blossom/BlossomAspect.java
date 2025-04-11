@@ -2,6 +2,7 @@ package io.github.honoriuss.blossom;
 
 import io.github.honoriuss.blossom.annotations.AdditionalTrackingInfo;
 import io.github.honoriuss.blossom.annotations.AppContext;
+import io.github.honoriuss.blossom.annotations.Track;
 import io.github.honoriuss.blossom.annotations.TrackParameters;
 import io.github.honoriuss.blossom.interfaces.ITrackingAppContextHandler;
 import io.github.honoriuss.blossom.interfaces.ITrackingHandler;
@@ -17,12 +18,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.stream.Collectors;
+import java.util.List;
+
+import static io.github.honoriuss.blossom.utils.AClassUtils.isReactive;
 
 @Aspect
 @Component
@@ -30,21 +34,21 @@ class BlossomAspect<T> { //TODO null checks
     private final ITrackingHandler<T> trackingHandler;
     private final ITrackingObjectMapper<T> trackingObjectMapper;
     private final BlossomAspectHelper<T> blossomAspectHelper;
-
-    private final LoggingContext loggingContext;
+    private final BlossomReactiveHelper<T> blossomReactiveHelper;
 
     public BlossomAspect(ITrackingHandler<T> trackingHandler,
                          ITrackingObjectMapper<T> trackingObjectMapper,
-                         BlossomAspectHelper<T> blossomAspectHelper, LoggingContext loggingContext) {
+                         BlossomAspectHelper<T> blossomAspectHelper,
+                         BlossomReactiveHelper<T> blossomReactiveHelper) {
         this.trackingHandler = trackingHandler;
         this.trackingObjectMapper = trackingObjectMapper;
         this.blossomAspectHelper = blossomAspectHelper;
-        this.loggingContext = loggingContext;
+        this.blossomReactiveHelper = blossomReactiveHelper;
     }
 
     @Before(value = "@annotation(trackParameters)")
     void track(JoinPoint joinPoint, TrackParameters trackParameters) {
-        var trackingObj = blossomAspectHelper.createTrackingObject(joinPoint, trackParameters);
+        var trackingObj = blossomAspectHelper.createTrackingObject(joinPoint, Arrays.asList(trackParameters.parameterNames()), trackParameters.optKey(), trackParameters.optArg());
 
         var method = ((MethodSignature) joinPoint.getSignature()).getMethod();
         if (method.isAnnotationPresent(AdditionalTrackingInfo.class)) {
@@ -59,20 +63,22 @@ class BlossomAspect<T> { //TODO null checks
         trackingHandler.handleTracking(trackingObjectMapper.mapResult(result));
     }
 
-    @Around("@annotation(io.github.honoriuss.blossom.annotations.TrackParamsInContext)")
-    Object logMethodParams(ProceedingJoinPoint joinPoint) throws Throwable {
-        var methodSignature = (MethodSignature) joinPoint.getSignature();
-        var methodName = methodSignature.getName();
-        var args = joinPoint.getArgs();
+    @Around("@annotation(track)")
+    public Object trackInputAndOutput(ProceedingJoinPoint joinPoint, Track track) throws Throwable {
+        if (isReactive(joinPoint)) {
+            return blossomReactiveHelper.handleReactiveStack(joinPoint, track);
+        }
+        Object result = joinPoint.proceed();
+        var trackingObj = blossomAspectHelper.createTrackingObject(joinPoint, Arrays.asList(track.parameterNames()), track.optKey(), track.optArg(), track.returnName(), result);
 
-        var params = Arrays.stream(args)
-                .map(arg -> arg != null ? arg.toString() : "null")
-                .collect(Collectors.joining(", "));
+        var method = ((MethodSignature) joinPoint.getSignature()).getMethod();
+        if (method.isAnnotationPresent(AdditionalTrackingInfo.class)) {
+            trackingHandler.handleTracking(trackingObj, method.getAnnotation(AdditionalTrackingInfo.class));
+        } else {
+            trackingHandler.handleTracking(trackingObj);
+        }
 
-        var logEntry = String.format("Method: %s, Params: [%s]", methodName, params);
-        loggingContext.addLogEntry(logEntry);
-
-        return joinPoint.proceed();
+        return result;
     }
 }
 
@@ -92,14 +98,14 @@ class BlossomAspectHelper<T> {
         logger.info("using ITrackingHandler: {} and ITrackingObjectMapper: {}", trackingHandler.getClass(), trackingObjectMapper.getClass());
     }
 
-    protected void addOptionalArgument(ArrayList<Object> args, ArrayList<String> parameterNames, Object optArg, String optKey) {
+    protected void addOptionalArgument(List<Object> args, List<String> parameterNames, Object optArg, String optKey) {
         if (!optKey.isEmpty()) {
             args.add(optArg);
             parameterNames.add(optKey);
         }
     }
 
-    protected void addAppContextArgument(ArrayList<Object> args, ArrayList<String> parameterNames, AppContext appContext) {
+    protected void addAppContextArgument(List<Object> args, List<String> parameterNames, AppContext appContext) {
         trackingAppContextHandler.addAppContext(args, parameterNames, appContext);
     }
 
@@ -122,14 +128,28 @@ class BlossomAspectHelper<T> {
         return null;
     }
 
-    protected T createTrackingObject(JoinPoint joinPoint, TrackParameters trackParameters) {
-        var args = new ArrayList<>(Arrays.asList(joinPoint.getArgs()));
-        var parameterNames = new ArrayList<>(Arrays.asList(trackParameters.parameterNames()));
+    protected T createTrackingObject(JoinPoint joinPoint, List<String> parameterNames, String optKey, String optArg) {
+        return createTrackingObject(joinPoint, parameterNames, optKey, optArg, "", null);
+    }
 
-        addOptionalArgument(args, parameterNames, trackParameters.optArg(), trackParameters.optKey());
+    protected T createTrackingObject(JoinPoint joinPoint, List<String> parameterNames, String optKey, String optArg,
+                                     String resultName, Object result) {
+        var args = Arrays.asList(joinPoint.getArgs());
+
+        addOptionalArgument(args, parameterNames, optArg, optKey);
         addAppContextArgument(args, parameterNames, getOptionalAppContext(joinPoint));
 
+        if (resultName != null &&
+                !resultName.isEmpty() &&
+                result != null) {
+            addResultArgument(resultName, result);
+        }
+
         return trackingObjectMapper.mapParameters(args, parameterNames);
+    }
+
+    private void addResultArgument(String resultName, Object result) { //TODO
+
     }
 
     protected void compareGenericParams(ITrackingHandler<T> trackingHandler,
@@ -168,3 +188,29 @@ class BlossomAspectHelper<T> {
     }
 }
 
+@Service
+class BlossomReactiveHelper<T> {
+    protected Object handleReactiveStack(ProceedingJoinPoint joinPoint, Track track) throws Throwable {
+        var result = joinPoint.proceed();
+        if (result instanceof Mono) {
+            return ((Mono<?>) result)
+                    .doOnNext(value -> {
+                        System.out.println("📤 Rückgabe (Mono): " + value);
+                    })
+                    .doOnTerminate(() -> {
+                        System.out.println("✅ [Mono] Methode abgeschlossen: ");
+                    });
+
+        } else if (result instanceof Flux) {
+            return ((Flux<?>) result)
+                    .doOnNext(value -> {
+                        System.out.println("📤 Rückgabe (Flux): " + value);
+                    })
+                    .doOnComplete(() -> {
+                        System.out.println("✅ [Flux] Methode abgeschlossen: ");
+                    });
+
+        }
+        throw new IllegalArgumentException("Cant handle reactive stack...");
+    }
+}
