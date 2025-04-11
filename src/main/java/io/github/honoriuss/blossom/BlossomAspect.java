@@ -98,26 +98,10 @@ class BlossomAspectHelper<T> {
         var result = joinPoint.proceed();
         if (result instanceof Mono) {
             return ((Mono<?>) result)
-                    .doOnNext(resValue -> {
-                        logger.info("📤 Rückgabe (): " + resValue);
-                        createTracking(joinPoint, track, resValue);
-                        logger.info("📤 Rückgabe (): " + "finished");
-                    });
-//                    .doOnTerminate(() -> {
-//                        logger.info("✅ [Mono] Methode abgeschlossen: ");
-//                    });
-
+                    .doOnNext(resValue -> createTracking(joinPoint, track, resValue));
         } else if (result instanceof Flux) {
             return ((Flux<?>) result)
-                    .doOnNext(resValue -> {
-                        logger.info("📤 Rückgabe (): " + resValue);
-                        createTracking(joinPoint, track, resValue);
-                        logger.info("📤 Rückgabe (): " + "finished");
-                    });
-//                    .doOnComplete(() -> {
-//                        logger.info("✅ [Flux] Methode abgeschlossen: ");
-//                    });
-
+                    .doOnNext(resValue -> createTracking(joinPoint, track, resValue));
         }
         throw new IllegalArgumentException("Cant handle reactive stack...");
     }
