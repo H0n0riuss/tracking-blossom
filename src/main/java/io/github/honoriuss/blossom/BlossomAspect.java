@@ -81,7 +81,7 @@ class BlossomAspectHelper<T> {
         this.trackingHandler = trackingHandler;
         this.trackingObjectMapper = trackingObjectMapper;
         this.trackingAppContextHandler = trackingAppContextHandler;
-        logger.info("using ITrackingHandler: {} and ITrackingObjectMapper: {}", trackingHandler.getClass(), trackingObjectMapper.getClass());
+        logger.debug("using ITrackingHandler: {} and ITrackingObjectMapper: {}", trackingHandler.getClass(), trackingObjectMapper.getClass());
     }
 
     protected Object handleTracking(ProceedingJoinPoint joinPoint, Track track) throws Throwable {

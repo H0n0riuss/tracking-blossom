@@ -11,54 +11,55 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 import java.util.List;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Configuration
 @EnableAspectJAutoProxy
 @ComponentScan(basePackages = "io.github.honoriuss.blossom")
 class BlossomConfig<T> {
-    private final Logger logger = Logger.getLogger(BlossomConfig.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(BlossomConfig.class.getName());
 
     @Bean
     @ConditionalOnMissingBean(ITrackingHandler.class)
     public ITrackingHandler<T> getHandler(ITrackingWriter<T> trackingWriter) {
-        logger.info("Using DefaultHandler");
-        logger.info("Using Writer: " + trackingWriter.getClass().getSimpleName());
+        logger.debug("Using DefaultHandler");
+        logger.debug("Using Writer: {}", trackingWriter.getClass().getSimpleName());
         return BlossomFactory.getDefaultTrackingHandler(trackingWriter);
     }
 
     @Bean
     @ConditionalOnMissingBean(ITrackingWriter.class)
     public ITrackingWriter<T> getWriter() {
-        logger.info("Using DefaultTrackingWriter");
+        logger.debug("Using DefaultTrackingWriter");
         return BlossomFactory.getDefaultWriter();
     }
 
     @Bean
     @ConditionalOnMissingBean(ITrackingObjectMapper.class)
     public ITrackingObjectMapper<String> getObjectMapper(ITrackingParameterRegistry parameterRegistry) {
-        logger.info("Using DefaultTrackingObjectMapper");
+        logger.debug("Using DefaultTrackingObjectMapper");
         return BlossomFactory.getDefaultObjectMapper(parameterRegistry);
     }
 
     @Bean
     @ConditionalOnMissingBean(ITrackingParameterRegistry.class)
     public ITrackingParameterRegistry getDefaultParameterRegistry(List<ITrackingParameterProvider> parameterProviderList) {
-        logger.info("Using DefaultTrackingParameterRegistry");
+        logger.debug("Using DefaultTrackingParameterRegistry");
         return BlossomFactory.getDefaultParameterRegistry(parameterProviderList);
     }
 
     @Bean
     @ConditionalOnMissingBean(ITrackingAppContextHandler.class)
     public ITrackingAppContextHandler getDefaultAppContextHandler() {
-        logger.info("Using DefaultTrackingAppContextHandler");
+        logger.debug("Using DefaultTrackingAppContextHandler");
         return BlossomFactory.getDefaultAppContextHandler();
     }
 
     @Bean
     @ConditionalOnProperty(name = "blossom.config.enabled", havingValue = "true")
     public ITrackingFilter getFilter(FilterRegistrationBean<ITrackingFilter> filterRegistrationBean, BlossomPropertiesConfig blossomPropertiesConfig) {
-        logger.info("Using TrackingDefaultFilter: FilterRegistrationBean: " + filterRegistrationBean.getClass().getSimpleName());
+        logger.debug("Using TrackingDefaultFilter: FilterRegistrationBean: {}", filterRegistrationBean.getClass().getSimpleName());
         var blossom = BlossomFactory.getDefaultFilter(blossomPropertiesConfig.getSessionIdName(), blossomPropertiesConfig.getTimestampName());
         filterRegistrationBean.setFilter(blossom);
         return blossom;
@@ -67,7 +68,7 @@ class BlossomConfig<T> {
     @Bean
     @ConditionalOnProperty(name = "blossom.config.enabled", havingValue = "true")
     public FilterRegistrationBean<ITrackingFilter> createFilterRegistrationBean() {
-        logger.info("Using DefaultTrackingRegistrationBean");
+        logger.debug("Using DefaultTrackingRegistrationBean");
         return new FilterRegistrationBean<>();
     }
 

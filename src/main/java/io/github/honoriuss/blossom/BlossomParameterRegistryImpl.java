@@ -14,17 +14,17 @@ class BlossomParameterRegistryImpl implements ITrackingParameterRegistry {
     BlossomParameterRegistryImpl(List<ITrackingParameterProvider> parameterProviderList) {
         this.parameterProviderList = parameterProviderList;
 
-        logger.info("{} parameter provider registered.", parameterProviderList.size());
+        logger.debug("{} parameter provider registered.", parameterProviderList.size());
     }
 
     @Override
     @Deprecated
     public void register(ITrackingParameterProvider trackingParameterProvider) {
         if (parameterProviderList.contains(trackingParameterProvider)) {
-            logger.info("Tracking parameter provider: {} is already registered.", trackingParameterProvider.getClass().getName());
+            logger.debug("Tracking parameter provider: {} is already registered.", trackingParameterProvider.getClass().getName());
             return;
         }
-        logger.info("Registering tracking parameter provider: {}", trackingParameterProvider.getClass().getName());
+        logger.debug("Registering tracking parameter provider: {}", trackingParameterProvider.getClass().getName());
         parameterProviderList.add(trackingParameterProvider);
     }
 
