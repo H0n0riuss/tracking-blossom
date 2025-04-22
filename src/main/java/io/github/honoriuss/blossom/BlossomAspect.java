@@ -30,14 +30,11 @@ import static io.github.honoriuss.blossom.utils.AClassUtils.isReactive;
 @Component
 class BlossomAspect<T> { //TODO null checks
     private final ITrackingHandler<T> trackingHandler;
-    private final ITrackingObjectMapper<T> trackingObjectMapper;
     private final BlossomAspectHelper<T> blossomAspectHelper;
 
     public BlossomAspect(ITrackingHandler<T> trackingHandler,
-                         ITrackingObjectMapper<T> trackingObjectMapper,
                          BlossomAspectHelper<T> blossomAspectHelper) {
         this.trackingHandler = trackingHandler;
-        this.trackingObjectMapper = trackingObjectMapper;
         this.blossomAspectHelper = blossomAspectHelper;
     }
 
@@ -55,7 +52,7 @@ class BlossomAspect<T> { //TODO null checks
 
     @AfterReturning(value = "@annotation(io.github.honoriuss.blossom.annotations.TrackResult)", returning = "result")
     void track(Object result) {
-        trackingHandler.handleTracking(trackingObjectMapper.mapResult(result));
+        blossomAspectHelper.handleAfterTrack(result);
     }
 
     @Around("@annotation(track)")
@@ -158,6 +155,10 @@ class BlossomAspectHelper<T> {
         addResultArgument(args, paramNames, resultName, result);
 
         return trackingObjectMapper.mapParameters(args, paramNames);
+    }
+
+    protected void handleAfterTrack(Object result) {
+        trackingHandler.handleTracking(trackingObjectMapper.mapResult(result));
     }
 
     private void addResultArgument(ArrayList<Object> args, ArrayList<String> parameterNames, String resultName, Object result) {
