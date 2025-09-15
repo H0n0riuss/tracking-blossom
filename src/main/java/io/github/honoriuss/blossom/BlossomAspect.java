@@ -18,13 +18,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static io.github.honoriuss.blossom.utils.AClassUtils.isReactive;
 
 @Aspect
 @Component
@@ -57,9 +53,6 @@ class BlossomAspect<T> { //TODO null checks
 
     @Around("@annotation(track)")
     public Object trackInputAndOutput(ProceedingJoinPoint joinPoint, Track track) throws Throwable {
-        if (isReactive(joinPoint)) {
-            return blossomAspectHelper.handleReactiveTracking(joinPoint, track);
-        }
         return blossomAspectHelper.handleTracking(joinPoint, track);
     }
 }
@@ -86,18 +79,6 @@ class BlossomAspectHelper<T> {
         createTracking(joinPoint, track, result);
 
         return result;
-    }
-
-    protected Object handleReactiveTracking(ProceedingJoinPoint joinPoint, Track track) throws Throwable {
-        var result = joinPoint.proceed();
-        if (result instanceof Mono) {
-            return ((Mono<?>) result)
-                    .doOnNext(resValue -> createTracking(joinPoint, track, resValue));
-        } else if (result instanceof Flux) {
-            return ((Flux<?>) result)
-                    .doOnNext(resValue -> createTracking(joinPoint, track, resValue));
-        }
-        throw new IllegalArgumentException("Cant handle reactive stack...");
     }
 
     private void createTracking(ProceedingJoinPoint joinPoint, Track track, Object result) {
